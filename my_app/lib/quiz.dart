@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/data/questions.dart';
 import 'package:my_app/question_screen.dart';
 import 'package:my_app/start_screen.dart';
 
 class Quiz extends StatefulWidget {
   const Quiz({super.key});
+
   @override
   State<Quiz> createState() {
     return _QuizState();
@@ -12,6 +14,7 @@ class Quiz extends StatefulWidget {
 
 class _QuizState extends State<Quiz> {
   var activeScreen = 'start-screen';
+  List<String> selectedAnswers = [];
   @override
   void initState() {
     activeScreen = 'start-screen';
@@ -24,12 +27,24 @@ class _QuizState extends State<Quiz> {
     });
   }
 
+  void chooseAnswer(String answer) {
+    selectedAnswers.add(answer);
+    if (selectedAnswers.length == questions.length) {
+      setState(() {
+        activeScreen = 'start-screen';
+        selectedAnswers = [];
+      });
+    }
+  }
+
   @override
   Widget build(context) {
     Widget screenWidget = StartScreen(switchScreen);
 
     if (activeScreen == 'questions-screen') {
-      screenWidget = const QuestionScreen();
+      screenWidget = QuestionScreen(
+        onSelectAnswer: chooseAnswer,
+      );
     }
 
     return MaterialApp(
@@ -38,8 +53,8 @@ class _QuizState extends State<Quiz> {
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Color.fromARGB(255, 42, 0, 66),
-                Color.fromARGB(255, 85, 3, 133),
+                Color.fromARGB(255, 40, 36, 240),
+                Color.fromARGB(255, 2, 65, 90),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
